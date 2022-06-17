@@ -1,0 +1,26 @@
+<div id="main-container" class="container mat-app-background">
+  <mat-toolbar id="volkan-title" color="primary">
+    Schermata iniziale di scelta
+    <span class="fill-space"></span>
+    <mat-icon>brightness_5</mat-icon>
+    <mat-slide-toggle [formControl]="toggleControl">
+    </mat-slide-toggle>
+    <mat-icon>bedtime</mat-icon>
+  </mat-toolbar>
+  <mat-sidenav-container class="navbar-container">
+    <mat-sidenav mode="side" opened>
+      <!-- navigation bar -->
+      <mat-nav-list>
+        <a mat-list-item routerLink="/">
+          <mat-icon>house</mat-icon> Home
+        </a>
+        <mat-divider></mat-divider>
+      </mat-nav-list>
+    </mat-sidenav>
+    <mat-sidenav-content>
+      <!-- main content container -->
+      <router-outlet></router-outlet>
+    </mat-sidenav-content>
+  </mat-sidenav-container>
+  <!-- <app-footer></app-footer> -->
+</div>

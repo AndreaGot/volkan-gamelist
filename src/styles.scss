@@ -1,0 +1,111 @@
+@use '@angular/material' as mat;
+@import '~@angular/material/theming';
+
+@include mat-core();
+
+/************************
+ Export theme as classes (useful for objects not styles as angular)
+************************/
+
+@mixin set-theme($theme) // define a new @mixin that will be invoked each time the theme is changed
+{
+  // Extract whichever individual palettes you need from the theme.
+  $primary-palette: map-get($theme, primary);
+  $accent-palette:  map-get($theme, accent);
+  $warn-palette:    map-get($theme, warn);
+
+  .primary-color
+  {
+    background-color: mat-color($primary-palette); // use the mat-color function to extract the color from the palette
+  }
+
+  .accent-color
+  {
+    background-color: mat-color($accent-palette); // use the mat-color function to extract the color from the palette
+  }
+
+  .warn-color
+  {
+    background-color: mat-color($warn-palette); // use the mat-color function to extract the color from the palette
+  }
+}
+
+@mixin set-toolbar-theme($theme) // define a new @mixin that will be invoked each time the theme is changed
+{
+  #indaco-title {
+    background-color: #260041;
+  }
+
+  #footer {
+    background-color: #260041;
+  }
+}
+
+
+/************************
+ Theming section
+************************/
+
+// Light theme
+$light-primary: mat-palette($mat-indigo);
+$light-accent:  mat-palette($mat-pink, A200, A100, A400);
+$light-warn:    mat-palette($mat-deep-orange);
+$angular-light-theme: mat.define-light-theme(
+  (
+    color: (
+      primary: $light-primary,
+      accent: $light-accent,
+      warn:$light-warn
+    ),
+  )
+);
+
+.light-theme {
+  @include mat.all-component-colors($angular-light-theme);
+  @include set-theme($angular-light-theme);
+  @include set-toolbar-theme($angular-light-theme);
+}
+
+// Dark theme
+$dark-primary: mat-palette($mat-blue-grey);
+$dark-accent:  mat-palette($mat-amber, A200, A100, A400);
+$dark-warn:    mat-palette($mat-deep-orange);
+$angular-dark-theme: mat.define-dark-theme(
+  (
+    color: (
+      primary: $dark-primary,
+      accent: $dark-accent,
+      warn: $dark-warn,
+    ),
+  )
+);
+
+.dark-theme {
+  @include mat.all-component-colors($angular-dark-theme);
+  @include set-theme($angular-dark-theme);
+}
+
+
+/************************
+ General CSS Section
+************************/
+
+/* You can add global styles to this file, and also import other style files */
+html, body { height: 100%; }
+body { margin: 0; font-family: Roboto, "Helvetica Neue", sans-serif; }
+
+.fill-space {
+    // This fills the remaining space, by using flexbox.
+    // Every toolbar row uses a flexbox row layout.
+    // needed for toolbars in order to put content on both ends
+    flex: 1 1 auto;
+  }
+
+  .material-icons {
+    vertical-align: middle;
+  }
+
+  .matRole .mat-option-text {
+    display: flex !important;
+    align-items: center;
+  }  

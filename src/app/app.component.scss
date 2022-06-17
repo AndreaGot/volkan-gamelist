@@ -1,0 +1,26 @@
+mat-sidenav {
+  width: 250px;
+}
+
+mat-toolbar {
+  height:5%;
+}
+
+mat-sidenav-container {
+  height: 95%;
+}
+
+.container {
+  height:100%;
+  position:relative;
+}
+
+.logo {
+  position:absolute;
+  height:3%;
+  cursor:pointer;
+}
+
+#search {
+  max-width: 200px;
+}
