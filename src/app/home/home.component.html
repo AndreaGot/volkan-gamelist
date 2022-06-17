@@ -4,3 +4,7 @@
   {{game.thumbnail}}
   <img src="{{game.thumbnail}}">
 </mat-card>
+<br>
+<mat-card *ngFor="let game of otherGames">
+  <mat-card-title> {{game}} ++</mat-card-title>
+</mat-card>

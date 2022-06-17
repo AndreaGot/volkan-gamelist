@@ -18,10 +18,13 @@ export class HomeComponent implements OnInit {
     bggId: 230802,
     thumbnail: '',
   }
+
+  otherGames = {};
   constructor(private http: HttpClient) { }
 
   ngOnInit(): void {
     this.getGameThumbnail(this.game.bggId);
+  this.getOtherGames();
   }
 
   getGameThumbnail(id) {
@@ -40,8 +43,23 @@ export class HomeComponent implements OnInit {
     });;
   }
 
+  getOtherGames() {
+    this.getOtherGamesfromGoogle().subscribe({
+      next: (res) => {
+        this.otherGames = res.values[0];
+      },
+      error: (err) => {
+        console.error(err);
+      }
+    });;
+  }
+
   getThumbnailFromBgg(id): Observable<any> {
     return this.http.get('https://boardgamegeek.com/xmlapi2/thing?id=' + id, { responseType: 'text' });
+  }
+
+  getOtherGamesfromGoogle() :Observable<any> {
+    return this.http.get('GOOGLE QUERY');
   }
 
 }
