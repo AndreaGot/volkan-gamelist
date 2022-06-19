@@ -14,6 +14,8 @@ import { MatIconModule } from '@angular/material/icon';
 import { MatListModule } from '@angular/material/list';
 import { MatMenuModule } from '@angular/material/menu';
 
+import { FlexLayoutModule } from '@angular/flex-layout';
+
 
 import { AppRoutingModule } from './app-routing.module';
 import { AppComponent } from './app.component';
@@ -38,6 +40,7 @@ import { HomeComponent } from './home/home.component';
     ReactiveFormsModule,
     BrowserAnimationsModule,
     HttpClientModule,
+    FlexLayoutModule,
   ],
   providers: [],
   bootstrap: [AppComponent]

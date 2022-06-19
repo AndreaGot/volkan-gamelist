@@ -2,8 +2,7 @@ import { Component, OnInit } from '@angular/core';
 import { HttpClient, HttpClientModule } from '@angular/common/http';
 import { Observable, ObservedValueOf } from 'rxjs';
 import { Game } from '../types/game';
-const { XMLParser, XMLBuilder, XMLValidator } = require('fast-xml-parser');
-
+import { DomSanitizer } from '@angular/platform-browser';
 
 
 @Component({
@@ -13,27 +12,62 @@ const { XMLParser, XMLBuilder, XMLValidator } = require('fast-xml-parser');
 })
 
 export class HomeComponent implements OnInit {
+
   loading = false;
   games: Game[] = [];
-  constructor(private http: HttpClient) { }
+
+
+  constructor(private http: HttpClient,
+    private sanitizer: DomSanitizer) { }
+  response: any;
 
   ngOnInit(): void {
     this.getGames();
   }
 
-  getGameThumbnail(item: Game) {
-    console.log('ci sono');
-    console.log(item);
+  getGameThumbnail(item: Game, obj: any) {
     if (!item.bggId) {
       item.thumbnail = 'https://styles.redditmedia.com/t5_2qhk5/styles/communityIcon_v58lvj23zo551.jpg?format=pjpg&s=1ff68e27037151461267326f90b701705fb5a527';
       console.log('nessuna immagine');
       return;
     }
-    this.getThumbnailFromBgg(item.bggId).subscribe({
-      next: (res) => {
-        const parser = new XMLParser();
-        let jObj = parser.parse(res);
-        item.thumbnail = jObj.items.item.thumbnail;
+    item.thumbnail = obj.items.item.thumbnail;
+  }
+
+  getGameMinPlayers(item: Game, obj: any) {
+    item.minPlayers = obj.items.item.minplayers.$.value
+  }
+
+  getGameMaxPlayers(item: Game, obj: any) {
+    item.maxPlayers = obj.items.item.maxplayers.$.value
+  }
+
+  getGameAuthor(item: Game, obj: any) {
+    item.maxPlayers = obj.items.item.maxplayers.$.value
+  }
+
+  getGameYear(item: Game, obj: any) {
+    item.year = obj.items.item.yearpublished.$.value
+  }
+
+  getPlayingTime(item: Game, obj: any) {
+    item.playingTime = obj.items.item.playingtime.$.value
+  }
+
+
+  async getGameData(item: Game) {
+    if (!item.bggId) {
+      this.getGameThumbnail(item, undefined);
+      return
+    }
+    this.getItemDataFromBgg(item.bggId).subscribe({
+      next: async (res) => {
+        const data = JSON.parse(res);
+        this.getGameThumbnail(item, data);
+        this.getGameMaxPlayers(item, data);
+        this.getGameMinPlayers(item, data);
+        this.getGameYear(item, data);
+        this.getPlayingTime(item, data);
       },
       error: (err) => {
         console.error(err);
@@ -41,9 +75,13 @@ export class HomeComponent implements OnInit {
     });
   }
 
+  public getSanitizedUrl(url: string) {
+    return this.sanitizer.bypassSecurityTrustUrl(url);
+  }
+
   getGames() {
     this.loading = true;
-    this.getOtherGamesfromGoogle().subscribe({
+    this.getGamesfromGoogle().subscribe({
       next: (res) => {
         this.loading = false;
         let position = -1;
@@ -51,7 +89,7 @@ export class HomeComponent implements OnInit {
           if (res[i][0]) {
             position = this.games.push(new Game(res[i][0], res[i][1], res[i][2], res[i][3]))
             let lastItem = this.games[position - 1];
-            this.getGameThumbnail(lastItem);
+            this.getGameData(lastItem);
           }
         }
       },
@@ -61,12 +99,12 @@ export class HomeComponent implements OnInit {
     });
   }
 
-  getThumbnailFromBgg(id): Observable<any> {
-    return this.http.get('https://boardgamegeek.com/xmlapi2/thing?id=' + id, { responseType: 'text' });
+  getItemDataFromBgg(id: string): Observable<any> {
+    return this.http.get('https://volkan-gamelist.herokuapp.com/bggGames/' + id, { responseType: 'text' });
   }
 
-  getOtherGamesfromGoogle(): Observable<any> {
-    return this.http.get('https://volkan-gamelist.herokuapp.com/games/5/100');
+  getGamesfromGoogle(): Observable<any> {
+    return this.http.get('https://volkan-gamelist.herokuapp.com/games/1/50');
   }
 
 }

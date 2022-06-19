@@ -1,14 +1,20 @@
 <div class="content">
+  <mat-spinner *ngIf="loading"></mat-spinner>
   <div fxLayout="row wrap">
-    <mat-spinner *ngIf="loading"></mat-spinner>
-    <mat-card *ngFor="let game of games" class="mat-elevation-z4" fxFlex="25%">
+    <mat-card *ngFor="let game of games" fxFlex="25%">
       <mat-card-header>
         <mat-card-title>
           {{game.name}}
         </mat-card-title>
       </mat-card-header>
       <mat-card-content>
-        <img src="{{game.thumbnail}}">
+        <center><img [src]="getSanitizedUrl(game.thumbnail)">
+        </center>
+        <mat-list dense>
+          <mat-list-item> <b>Anno:</b> {{game.year}} </mat-list-item>
+          <mat-list-item> <b>Numero di giocatori:</b> {{game.minPlayers}} - {{game.maxPlayers}}</mat-list-item>
+          <mat-list-item> <b>Durata partita:</b> {{game.playingTime}} </mat-list-item>
+        </mat-list>
       </mat-card-content>
     </mat-card>
   </div>
