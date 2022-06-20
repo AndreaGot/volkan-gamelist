@@ -18,6 +18,7 @@
           <mat-list-item> <b>Numero di giocatori:</b> {{game.minPlayers}} - {{game.maxPlayers}}</mat-list-item>
           <mat-list-item> <b>Durata partita:</b> {{game.playingTime}} </mat-list-item>
         </mat-list>
+        <button mat-raised-button routerLink="/game/{{game.bggId}}">Vai al Gioco</button>
       </mat-card-content>
     </mat-card>
   </div>

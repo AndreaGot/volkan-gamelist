@@ -15,7 +15,8 @@ export class HomeComponent implements OnInit {
 
   loading = false;
   games: Game[] = [];
-
+  content: Game[] = [];
+  searchword: '';
 
   constructor(private http: HttpClient,
     private sanitizer: DomSanitizer) { }
