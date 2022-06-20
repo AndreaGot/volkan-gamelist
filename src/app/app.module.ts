@@ -13,34 +13,45 @@ import { MatSlideToggleModule } from '@angular/material/slide-toggle';
 import { MatIconModule } from '@angular/material/icon';
 import { MatListModule } from '@angular/material/list';
 import { MatMenuModule } from '@angular/material/menu';
-
+import {MatButtonModule} from '@angular/material/button';
+import {MatDividerModule} from '@angular/material/divider';
+import { LayoutModule } from '@angular/cdk/layout'
 import { FlexLayoutModule } from '@angular/flex-layout';
 
 
 import { AppRoutingModule } from './app-routing.module';
 import { AppComponent } from './app.component';
 import { HomeComponent } from './home/home.component';
+import { ProfileComponent } from './profile/profile.component';
+import { GameComponent } from './game/game.component';
 
 @NgModule({
   declarations: [
     AppComponent,
-    HomeComponent
+    HomeComponent,
+    ProfileComponent,
+    GameComponent
   ],
   imports: [
-    BrowserModule,
     AppRoutingModule,
-    MatToolbarModule,
+    AppRoutingModule,
+    BrowserAnimationsModule,
+    BrowserModule,
+    BrowserModule,
+    FlexLayoutModule,
+    FormsModule,
+    HttpClientModule,
+    LayoutModule,
+    MatButtonModule,
     MatCardModule,
-    MatSidenavModule,
-    MatSlideToggleModule,
+    MatDividerModule,
     MatIconModule,
     MatListModule,
     MatMenuModule,
-    FormsModule,
+    MatSidenavModule,
+    MatSlideToggleModule,
+    MatToolbarModule,
     ReactiveFormsModule,
-    BrowserAnimationsModule,
-    HttpClientModule,
-    FlexLayoutModule,
   ],
   providers: [],
   bootstrap: [AppComponent]

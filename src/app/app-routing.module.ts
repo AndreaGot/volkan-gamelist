@@ -1,11 +1,21 @@
 import { NgModule } from '@angular/core';
 import { Routes, RouterModule } from '@angular/router';
+import { GameComponent } from './game/game.component';
 import { HomeComponent } from './home/home.component';
+import { ProfileComponent } from './profile/profile.component';
 
 const routes: Routes = [
   {
     path: 'home',
     component: HomeComponent,
+  },
+  {
+    path: 'profile',
+    component: ProfileComponent,
+  },
+  {
+    path: 'game',
+    component: GameComponent,
   },
   // All other paths lead to home
   {
