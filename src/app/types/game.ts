@@ -4,6 +4,7 @@ export class Game {
   notes: string = '';
   bggId: string = '';
   thumbnail: string = '';
+  description: string = '';
   genre: string = '';
   author: string = '';
   year: string = '';
