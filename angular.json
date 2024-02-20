@@ -72,18 +72,18 @@
         "serve": {
           "builder": "@angular-devkit/build-angular:dev-server",
           "options": {
-            "browserTarget": "volkan-gamelist:build"
+            "buildTarget": "volkan-gamelist:build"
           },
           "configurations": {
             "production": {
-              "browserTarget": "volkan-gamelist:build:production"
+              "buildTarget": "volkan-gamelist:build:production"
             }
           }
         },
         "extract-i18n": {
           "builder": "@angular-devkit/build-angular:extract-i18n",
           "options": {
-            "browserTarget": "volkan-gamelist:build"
+            "buildTarget": "volkan-gamelist:build"
           }
         },
         "test": {
