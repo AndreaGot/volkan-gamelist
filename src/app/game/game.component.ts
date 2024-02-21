@@ -4,6 +4,8 @@ import { ActivatedRoute, Router } from '@angular/router';
 import { BggService } from '../services/bgg.service';
 import { DataService } from '../services/data.service';
 import { Game } from '../types/game';
+import { PersistenceService } from '../services/persistence.service';
+import * as xml2js from 'xml2js';
 
 @Component({
   selector: 'app-game',
@@ -11,29 +13,44 @@ import { Game } from '../types/game';
   styleUrls: ['./game.component.scss']
 })
 export class GameComponent implements OnInit {
-  game: Game;
+  game: any;
   bggGame: string;
+  games: Game[] = [];
   gameId: string = '';
   constructor(private route: ActivatedRoute,
     private router: Router,
     private dataService: DataService,
     private bggService: BggService,
+    private persistenceService: PersistenceService,
     private sanitizer: DomSanitizer) { }
 
-  ngOnInit(): void {
-    // this.route.params.subscribe(params => {
-    //   this.gameId = params['id'];
-    //   this.bggService.getGameFromBGGById(this.gameId).subscribe({
-    //     next: async (res) => {
-    //       this.game = new Game(res[0], res[1], res[2], res[3]);
-    //       await this.bggService.getGameData(this.game);
-    //     }
-    //   });
-
-    // });
+  async ngOnInit(): Promise<any> {
+    this.route.params.subscribe(async params => {
+      this.gameId = params['id'];
+      this.game = await this.getSingleGame(this.gameId);
+      console.log(this.game);
+    });
   }
 
   public getSanitizedUrl(url: string) {
     return this.sanitizer.bypassSecurityTrustUrl(url);
+  }
+
+  printGameDuration(min, max) {
+    if (min === max) {
+      return `${min} minuti`;
+    }
+    return `${min} - ${max} minuti`;
+  }
+
+  printPlayerCount(min, max) {
+    if (min === max) {
+      return `${min} giocatori`;
+    }
+    return `${min} - ${max} giocatori`;
+  }
+
+  async getSingleGame(id: string) {
+    return this.bggService.getSingleGameFromId(id);
   }
 }

@@ -1,26 +1,27 @@
 <mat-card appearance="outlined">
-    <mat-card-header>
-        <mat-card-title>
-            {{game.name}}
-        </mat-card-title>
-    </mat-card-header>
-    <mat-card-content>
-        <img [src]="getSanitizedUrl(game.thumbnail)">
+  <mat-card-header>
+    <mat-card-title>
+      {{game.name}}
+    </mat-card-title>
+  </mat-card-header>
+  <mat-card-content>
+    <img [src]="getSanitizedUrl(game.thumbnail)">
 
-        <mat-list dense>
-            <mat-list-item> <b>Anno:</b> {{game.year}} </mat-list-item>
-            <mat-list-item> <b>Numero di giocatori:</b> {{game.minPlayers}} - {{game.maxPlayers}}</mat-list-item>
-            <mat-list-item> <b>Durata partita:</b> {{game.minPlayingTime}} - {{game.maxPlayingTime}} </mat-list-item>
-        </mat-list>
+    <mat-list dense>
+      <mat-list-item> <b>Anno:</b> {{game.year}} </mat-list-item>
+      <mat-list-item> <b>Numero di giocatori:</b> {{printPlayerCount(game.minPlayers, game.maxPlayers)}}</mat-list-item>
+      <mat-list-item> <b>Durata partita:</b> {{printGameDuration(game.minPlayingTime, game.maxPlayingTime)}}
+      </mat-list-item>
+    </mat-list>
 
-        {{game.description}}
-        <br>
-        <br>
-        <button mat-raised-button>
-            <mat-icon>contact_support</mat-icon>Richiedi Gioco
-        </button>
-        <a mat-raised-button href="https://boardgamegeek.com/boardgame/{{game.bggId}}" target="_blank">
-            <mat-icon>casino_outline</mat-icon>Vedi su BGG
-        </a>
-    </mat-card-content>
+    {{game.description}}
+    <br>
+    <br>
+    <button mat-raised-button>
+      <mat-icon>contact_support</mat-icon>Richiedi Gioco
+    </button>
+    <a mat-raised-button href="https://boardgamegeek.com/boardgame/{{game.bggId}}" target="_blank">
+      <mat-icon>casino_outline</mat-icon>Vedi su BGG
+    </a>
+  </mat-card-content>
 </mat-card>

@@ -6,6 +6,8 @@ import { DomSanitizer } from '@angular/platform-browser';
 import { DataService } from 'src/app/services/data.service';
 import { BggService } from 'src/app/services/bgg.service';
 import * as xml2js from 'xml2js';
+import { Router } from '@angular/router';
+import { PersistenceService } from '../services/persistence.service';
 
 
 @Component({
@@ -24,8 +26,10 @@ export class HomeComponent implements OnInit {
 
   constructor(private http: HttpClient,
     private sanitizer: DomSanitizer,
+    private router: Router,
     private dataService: DataService,
-    private bggService: BggService) { }
+    private bggService: BggService,
+    private persistenceService: PersistenceService) { }
   response: any;
 
   ngOnInit(): void {
@@ -40,34 +44,19 @@ export class HomeComponent implements OnInit {
         if (err) {
           throw err;
         }
-        this.games = this.dataService.createGameInternalData(data);
-        console.log(this.games);
+        this.games = this.dataService.createGamesInternalData(data);
+        this.persistenceService.setGames(this.games);
         this.loading = false;
       });
     });
   }
-
-  getSingleGame(id:string) {
-    this.loading = true;
-
-    this.bggService.getGameFromBGGById(id).subscribe(result => {
-      const p: xml2js.Parser = new xml2js.Parser();
-      p.parseString(result, (err, data) => {
-        if (err) {
-          throw err;
-        }
-        this.singleGame = JSON.stringify(data, null, 4); //format your json output
-      });
-    });
-  }
-
 
   public getSanitizedUrl(url: string) {
     return this.sanitizer.bypassSecurityTrustUrl(url);
   }
 
   printGameDuration(min, max) {
-    if(min === max) {
+    if (min === max) {
       return `${min} minuti`;
     }
 
@@ -75,10 +64,15 @@ export class HomeComponent implements OnInit {
   }
 
   printPlayerCount(min, max) {
-    if(min === max) {
+    if (min === max) {
       return `${min} giocatori`;
     }
 
     return `${min} - ${max} giocatori`;
+  }
+
+  goToGame(game: Game) {
+    const routeLink = `/game/${game.bggId}`;
+    this.router.navigate([routeLink]);
   }
 }
