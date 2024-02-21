@@ -2,6 +2,7 @@ import { HttpClient, HttpClientModule } from '@angular/common/http';
 import { Injectable } from '@angular/core';
 import { Observable } from 'rxjs';
 import { Game } from '../types/game';
+import * as xml2js from 'xml2js';
 
 @Injectable({
   providedIn: 'root'
@@ -12,26 +13,40 @@ export class BggService {
     private http: HttpClient,
   ) { }
 
-  getItemDataFromBgg(id: string): Observable<any> {
-    return this.http.get('https://volkan-gamelist.herokuapp.com/bggGames/' + id, { responseType: 'json' });
+  getGamesFromBGG(): Observable<any> {
+    return this.http.get('https://boardgamegeek.com/xmlapi2/collection?username=volkan_tdg_trento&page=1&stats=1', { responseType: 'text' });
+  }
+
+  getGameFromBGGById(id): Observable<any> {
+    return this.http.get(`https://boardgamegeek.com/xmlapi2/thing?id=${id}&stats=1`, { responseType: 'text' });
   }
 
 
 
-  async getGameData(item: Game) {
+  async getGameExtraData(item: Game) {
     if (!item.bggId) {
       this.getGameThumbnail(item, undefined);
       return
     }
-    this.getItemDataFromBgg(item.bggId).subscribe({
+    this.getGameFromBGGById(item.bggId).subscribe({
       next: async (res) => {
-        const data = res;
-        this.getGameThumbnail(item, data);
-        this.getGameMaxPlayers(item, data);
-        this.getGameMinPlayers(item, data);
-        this.getGameYear(item, data);
-        this.getPlayingTime(item, data);
-        this.getDescription(item, data);
+
+        const p: xml2js.Parser = new xml2js.Parser();
+        p.parseString(res, (err, data) => {
+          if (err) {
+            throw err;
+          }
+          console.log(data);
+          this.getGameThumbnail(item, data);
+          this.getGameMaxPlayers(item, data);
+          this.getGameMinPlayers(item, data);
+          this.getGameYear(item, data);
+          this.getMaxPlayingTime(item, data);
+          this.getMinPlayingTime(item, data);
+          this.getDescription(item, data);
+          return item;
+        });
+
       },
       error: (err) => {
         console.error(err);
@@ -45,30 +60,34 @@ export class BggService {
       console.log('nessuna immagine');
       return;
     }
-    item.thumbnail = obj.items.item.thumbnail;
+    item.thumbnail = obj.items.item[0].thumbnail[0];
   }
 
   getGameMinPlayers(item: Game, obj: any) {
-    item.minPlayers = obj.items.item.minplayers.$.value
+    item.minPlayers = obj.items.item[0].minplayers[0].$.value
   }
 
   getGameMaxPlayers(item: Game, obj: any) {
-    item.maxPlayers = obj.items.item.maxplayers.$.value
+    item.maxPlayers = obj.items.item[0].maxplayers[0].$.value
   }
 
   getGameAuthor(item: Game, obj: any) {
-    item.maxPlayers = obj.items.item.maxplayers.$.value
+    item.maxPlayers = obj.items.item[0].maxplayers[0].$.value
   }
 
   getGameYear(item: Game, obj: any) {
-    item.year = obj.items.item.yearpublished.$.value
+    item.year = obj.items.item[0].yearpublished[0].$.value
   }
 
-  getPlayingTime(item: Game, obj: any) {
-    item.playingTime = obj.items.item.playingtime.$.value
+  getMaxPlayingTime(item: Game, obj: any) {
+    item.maxPlayingTime = obj.items.item[0].maxplaytime[0].$.value
+  }
+
+  getMinPlayingTime(item: Game, obj: any) {
+    item.minPlayingTime = obj.items.item[0].minplaytime[0].$.value
   }
 
   getDescription(item: Game, obj: any) {
-    item.description = obj.items.item.description
+    item.description = obj.items.item[0].description[0]
   }
 }

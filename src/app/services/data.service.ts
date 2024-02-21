@@ -9,17 +9,22 @@ import { BggService } from './bgg.service';
 })
 export class DataService {
 
-  constructor(private http: HttpClient) { }
+  constructor(private http: HttpClient, private bggService: BggService) { }
 
 
   //REST CALLS
 
-  getGamesFromGoogle(): Observable<any> {
-    return this.http.get('https://volkan-gamelist.herokuapp.com/games/3/50');
-  }
+  createGameInternalData(allGamesList: any) {
+    const gameArray = [];
+    for (let i = 0; i < 10/*allGamesList.items.item.length*/; i++) {
+      const item = allGamesList.items.item[i];
+      console.log(item);
+      const game: Game = new Game(item.name[0]._, 'Volkan', item.yearpublished ? item.yearpublished[0] : 'N/A', item.$.objectid);
+      this.bggService.getGameExtraData(game);
+      gameArray.push(game); 
+    }
+    return gameArray;
 
-  getGameFromGoogleById(id): Observable<any> {
-    return this.http.get(`https://volkan-gamelist.herokuapp.com/games/${id}`);
   }
 
 

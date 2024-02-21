@@ -4,7 +4,8 @@
     <mat-card appearance="outlined">Ci sono {{games.length}} giochi disponibili</mat-card>
   </div>
   <div fxFlexFill fxLayoutAlign="start stretch" fxLayout="row wrap">
-    <mat-card appearance="outlined" *ngFor="let game of games" fxFlex="20%" fxFlex.lt-md="50%" fxFlex.lt-sm="100%" class="mat-elevation-z8">
+    <mat-card appearance="outlined" *ngFor="let game of games" fxFlex="20%" fxFlex.lt-md="50%" fxFlex.lt-sm="100%"
+      class="mat-elevation-z8">
       <mat-card-header>
         <mat-card-title>
           {{game.name}}
@@ -15,8 +16,8 @@
         </center>
         <mat-list dense>
           <mat-list-item> <b>Anno:</b> {{game.year}} </mat-list-item>
-          <mat-list-item> <b>Numero di giocatori:</b> {{game.minPlayers}} - {{game.maxPlayers}}</mat-list-item>
-          <mat-list-item> <b>Durata partita:</b> {{game.playingTime}} </mat-list-item>
+          <mat-list-item> <b>Numero di giocatori:</b> {{printPlayerCount(game.minPlayers, game.maxPlayers)}}</mat-list-item>
+          <mat-list-item> <b>Durata partita:</b> {{printGameDuration(game.minPlayingTime, game.maxPlayingTime)}} </mat-list-item>
         </mat-list>
         <button mat-raised-button routerLink="/game/{{game.bggId}}">Vai al Gioco</button>
       </mat-card-content>

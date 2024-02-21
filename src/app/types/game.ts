@@ -10,12 +10,13 @@ export class Game {
   year: string = '';
   minPlayers: string = '';
   maxPlayers: string = '';
-  playingTime: number = -1;
+  minPlayingTime: number = -1;
+  maxPlayingTime: number = -1;
 
-  constructor(name: string, owner: string, notes: string, bggId: string) {
+  constructor(name: string, owner: string, year: string, bggId: string) {
     this.name = name;
     this.owner = owner;
-    this.notes = notes;
+    this.year = year;
     this.bggId = bggId;
   }
 }

@@ -21,16 +21,16 @@ export class GameComponent implements OnInit {
     private sanitizer: DomSanitizer) { }
 
   ngOnInit(): void {
-    this.route.params.subscribe(params => {
-      this.gameId = params['id'];
-      this.dataService.getGameFromGoogleById(this.gameId).subscribe({
-        next: async (res) => {
-          this.game = new Game(res[0], res[1], res[2], res[3]);
-          await this.bggService.getGameData(this.game);
-        }
-      });
+    // this.route.params.subscribe(params => {
+    //   this.gameId = params['id'];
+    //   this.bggService.getGameFromBGGById(this.gameId).subscribe({
+    //     next: async (res) => {
+    //       this.game = new Game(res[0], res[1], res[2], res[3]);
+    //       await this.bggService.getGameData(this.game);
+    //     }
+    //   });
 
-    });
+    // });
   }
 
   public getSanitizedUrl(url: string) {

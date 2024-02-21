@@ -5,6 +5,7 @@ import { Game } from '../types/game';
 import { DomSanitizer } from '@angular/platform-browser';
 import { DataService } from 'src/app/services/data.service';
 import { BggService } from 'src/app/services/bgg.service';
+import * as xml2js from 'xml2js';
 
 
 @Component({
@@ -16,6 +17,7 @@ import { BggService } from 'src/app/services/bgg.service';
 export class HomeComponent implements OnInit {
 
   loading = false;
+  singleGame: any;
   games: Game[] = [];
   content: Game[] = [];
   searchword: '';
@@ -32,25 +34,51 @@ export class HomeComponent implements OnInit {
 
   getGames() {
     this.loading = true;
-    this.dataService.getGamesFromGoogle().subscribe({
-      next: (res) => {
-        this.loading = false;
-        let position = -1;
-        for (let i = 0; i < res.length; i++) {
-          if (res[i][0]) {
-            position = this.games.push(new Game(res[i][0], res[i][1], res[i][2], res[i][3]))
-            let lastItem = this.games[position - 1];
-            this.bggService.getGameData(lastItem);
-          }
+    this.bggService.getGamesFromBGG().subscribe(result => {
+      const p: xml2js.Parser = new xml2js.Parser();
+      p.parseString(result, (err, data) => {
+        if (err) {
+          throw err;
         }
-      },
-      error: (err) => {
-        console.error(err);
-      }
+        this.games = this.dataService.createGameInternalData(data);
+        console.log(this.games);
+        this.loading = false;
+      });
     });
   }
 
+  getSingleGame(id:string) {
+    this.loading = true;
+
+    this.bggService.getGameFromBGGById(id).subscribe(result => {
+      const p: xml2js.Parser = new xml2js.Parser();
+      p.parseString(result, (err, data) => {
+        if (err) {
+          throw err;
+        }
+        this.singleGame = JSON.stringify(data, null, 4); //format your json output
+      });
+    });
+  }
+
+
   public getSanitizedUrl(url: string) {
     return this.sanitizer.bypassSecurityTrustUrl(url);
+  }
+
+  printGameDuration(min, max) {
+    if(min === max) {
+      return `${min} minuti`;
+    }
+
+    return `${min} - ${max} minuti`;
+  }
+
+  printPlayerCount(min, max) {
+    if(min === max) {
+      return `${min} giocatori`;
+    }
+
+    return `${min} - ${max} giocatori`;
   }
 }
