@@ -60,7 +60,7 @@ $angular-light-theme: mat.define-light-theme((color: (primary: $light-primary,
     ));
 
 .light-theme {
-  @include mat.all-legacy-component-colors($angular-light-theme);
+  @include mat.all-component-colors($angular-light-theme);
   @include set-theme($angular-light-theme);
   @include set-toolbar-theme($angular-light-theme);
 }
@@ -76,7 +76,7 @@ $angular-dark-theme: mat.define-dark-theme((color: (primary: $dark-primary,
     ));
 
 .dark-theme {
-  @include mat.all-legacy-component-colors($angular-dark-theme);
+  @include mat.all-component-colors($angular-dark-theme);
   @include set-theme($angular-dark-theme);
 }
 
@@ -102,6 +102,7 @@ body {
   vertical-align: middle;
 }
 
+/*TODO(mdc-migration): The following rule targets internal classes of option that may no longer apply for the MDC version.*/
 .matRole .mat-option-text {
   display: flex !important;
   align-items: center;
